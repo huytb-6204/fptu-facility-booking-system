@@ -1,54 +1,50 @@
 # FPTU Facility Booking System – Monorepo
 
-This is the official repository for the Facility Booking System project at FPT University.
-It uses a monorepo structure including both Backend (NestJS) and Frontend (React + Vite).
+This is the official repository for the Facility Booking System project at FPT University.  
+It uses a monorepo structure including both the Backend (NestJS) and Frontend (React + Vite).
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 fptu-facility-booking-system/
-│── backend/ # NestJS API server
-│── frontend/ # React + Vite frontend
-│── docs/ # SRS, workflows (W1–W5), testcases (STC01–STC05)
+│── backend/        # NestJS API server
+│── frontend/       # React + Vite frontend
+│── docs/           # SRS, workflows (W1–W5), testcases (STC01–STC05)
 │── README.md
 │── .gitignore
 
-yaml
-Sao chép mã
-
 ---
 
-## 🚀 Backend (NestJS)
+## Backend (NestJS)
 
-### Run Backend:
+### Run Backend
+
 cd backend
 npm install
-npm run start:dev
+npm run start       # run application
+npm run start:dev   # development mode
 
-yaml
-Sao chép mã
+### Technologies
 
-### Technologies:
 - NestJS
 - TypeORM
-- PostgreSQL
+- MongoDB / Mongoose
 - JWT Authentication
-- Class Validator / Transformer
+- Class Validator / Class Transformer
 
 ---
 
-## 🎨 Frontend (React + Vite)
+## Frontend (React + Vite)
 
-### Run Frontend:
+### Run Frontend
+
 cd frontend
 npm install
 npm run dev
 
-yaml
-Sao chép mã
+### Technologies
 
-### Technologies:
 - React + Vite
 - React Router
 - Axios
@@ -56,21 +52,26 @@ Sao chép mã
 
 ---
 
-## 📚 Documentation
-All documents related to the project are inside the `docs/` folder:
-- SRS (Software Requirements Specification)
-- Workflows (W1 – W5)
-- Testcases (STC01 – STC05)
-- ERD
+## Documentation
+
+All documents related to the project are located in the `docs/` folder:
+
+- SRS – Software Requirements Specification
+- Workflows (W1–W5)
+- Testcases (STC01–STC05)
+- ERD – Entity Relationship Diagram
 - System Architecture Diagram
 
 ---
 
-## 👥 Team Information
-(Thêm thông tin nhóm nếu cần)
+## Team Information
+
+- Trần Bá Huy
+- Nguyễn Đặng Đăng Quan
 
 ---
 
-## 📌 Notes
-- Do NOT commit `.env`, database credentials, or `node_modules`.
+## Notes
+
+- Do not commit `.env`, database credentials, or `node_modules`.
 - Follow commit message guidelines for consistency.
