@@ -22,4 +22,4 @@ exports.create = async (data) => {
 
   await booking.save();
   return booking;
-};  
+};
