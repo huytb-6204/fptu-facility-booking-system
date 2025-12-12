@@ -1,6 +1,18 @@
 import { hasConflict } from "./conflictChecker.js";
 import Booking from "../models/Booking.js";
 
+export const getAll = async () => {
+  const bookings = await Booking.find()
+    .populate("user")
+    .populate("room")
+    .populate("approval.approver")
+    .populate("statusHistory.changedBy");
+
+  return bookings;
+};
+
+
+
 export const create = async (data) => {
   const { room, date, startTime, endTime } = data;
 
