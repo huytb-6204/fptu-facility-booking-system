@@ -1,30 +1,32 @@
-const express = require("express");
-const Building = require("../models/Building");
-const router = express.Router();
+import { Router } from "express";
+import Building from "../models/Building.js";
+import { authMiddleware, requireRole } from "../middlewares/authMiddleware.js";
 
-router.post("/", async (req, res) => {
+const router = Router();
+
+router.post("/", authMiddleware, requireRole("Admin"), async (req, res) => {
   const item = await Building.create(req.body);
   res.json(item);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, requireRole("Admin"), async (req, res) => {
   const list = await Building.find().populate("campus");
   res.json(list);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMiddleware, requireRole("Admin"), async (req, res) => {
   const item = await Building.findById(req.params.id).populate("campus");
   res.json(item);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, requireRole("Admin"), async (req, res) => {
   const item = await Building.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(item);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, requireRole("Admin"), async (req, res) => {
   await Building.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted" });
 });
 
-module.exports = router;
+export default router;

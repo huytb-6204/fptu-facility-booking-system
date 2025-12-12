@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const NotificationTemplateSchema = new mongoose.Schema({
   type: { type: String, enum: ["Email", "SMS"], required: true },
@@ -6,4 +6,4 @@ const NotificationTemplateSchema = new mongoose.Schema({
   content: String,
 });
 
-module.exports = mongoose.model("NotificationTemplate", NotificationTemplateSchema);
+export default mongoose.model("NotificationTemplate", NotificationTemplateSchema);
