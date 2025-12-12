@@ -1,7 +1,7 @@
-const bookingService = require("../services/bookingService");
+import * as bookingService from "../services/bookingService.js";
 
 // CREATE Booking
-exports.createBooking = async (req, res) => {
+export const createBooking = async (req, res) => {
   try {
     const result = await bookingService.create(req.body);
     res.json(result);
@@ -11,13 +11,24 @@ exports.createBooking = async (req, res) => {
 };
 
 // GET ALL bookings
-exports.getAllBookings = async (req, res) => {
+export const getAllBookings = async (req, res) => {
   const list = await bookingService.getAll();
   res.json(list);
 };
 
-// APPROVE
-exports.approveBooking = async (req, res) => {
+
+// CANCEL BOOKING
+export const cancelBooking = async (req, res) => {
+  try {
+    const result = await bookingService.cancel(req.params.id, req.body.user);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// APPROVE BOOKING
+export const approveBooking = async (req, res) => {
   try {
     const result = await bookingService.approve(req.params.id, req.body.approver);
     res.json(result);
@@ -26,8 +37,8 @@ exports.approveBooking = async (req, res) => {
   }
 };
 
-// REJECT
-exports.rejectBooking = async (req, res) => {
+// REJECT BOOKING
+export const rejectBooking = async (req, res) => {
   try {
     const result = await bookingService.reject(req.params.id, req.body.approver);
     res.json(result);

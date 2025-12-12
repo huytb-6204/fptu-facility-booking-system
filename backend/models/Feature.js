@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const FeatureSchema = new mongoose.Schema({
   name: { type: String, required: true },
   icon: String,
 });
 
-module.exports = mongoose.model("Feature", FeatureSchema);
+export default mongoose.model("Feature", FeatureSchema);

@@ -1,6 +1,7 @@
-const express = require("express");
-const Room = require("../models/Room");
-const router = express.Router();
+import { Router } from "express";
+import Room from "../models/Room.js";
+
+const router = Router();
 
 router.post("/", async (req, res) => res.json(await Room.create(req.body)));
 
@@ -27,4 +28,4 @@ router.delete("/:id", async (req, res) => {
   res.json({ message: "Deleted" });
 });
 
-module.exports = router;
+export default router;

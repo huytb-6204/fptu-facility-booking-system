@@ -1,10 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const bookingController = require("../controllers/bookingController");
+import { Router } from "express";
+import {
+  createBooking,
+  getAllBookings,
+  cancelBooking,
+  approveBooking,
+  rejectBooking,
+} from "../controllers/bookingController.js";
+import { authMiddleware, requireRole } from "../middlewares/authMiddleware.js";
 
-router.post("/", bookingController.createBooking);
-router.get("/", bookingController.getAllBookings);
-router.put("/approve/:id", bookingController.approveBooking);
-router.put("/reject/:id", bookingController.rejectBooking);
+const router = Router();
 
-module.exports = router;
+router.post("/", authMiddleware, requireRole("Student", "Lecturer"), createBooking);
+router.get("/", authMiddleware, requireRole("Student", "Lecturer", "Admin"), getAllBookings);
+router.put("/cancel/:id", authMiddleware, requireRole("Student"), cancelBooking);   // Student cancel
+router.put("/approve/:id", authMiddleware, requireRole("Lecturer", "Admin"), approveBooking);  // Lecturer/Admin approve
+router.put("/reject/:id", authMiddleware, requireRole("Lecturer", "Admin"), rejectBooking);   // Lecturer/Admin reject
+
+export default router;

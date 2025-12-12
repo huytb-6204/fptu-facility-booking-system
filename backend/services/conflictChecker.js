@@ -1,12 +1,13 @@
-const Booking = require("../models/Booking");
+import Booking from "../models/Booking.js";
 
-exports.hasConflict = async ({ room, date, startTimeBooking, endTimeBooking }) => {
-const conflict = await Booking.findOne({
-  room: room,
-  date: date,
-  startTime: { $lt: endTimeBooking },
-  endTime: { $gt: startTimeBooking }
-});
 
-  return conflict ? true : false;
+export const hasConflict = async ({ room, date, startTime, endTime }) => {
+  const conflict = await Booking.findOne({
+    room,
+    date,
+    startTime: { $lt: endTime },
+    endTime: { $gt: startTime },
+  });
+
+  return !!conflict;
 };
