@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
@@ -9,7 +10,7 @@ export default function UserLayout({ children }) {
       <div className="flex-1 flex flex-col">
         <Header />
         <div className="p-6 overflow-auto">
-          {children}
+          {children || <Outlet />}
         </div>
       </div>
     </div>

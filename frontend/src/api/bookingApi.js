@@ -5,7 +5,7 @@ const authHeaders = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-export const getBookings = async () => {
+export const getAllBookings = async () => {
   const res = await fetch(`${API_BASE}/booking`, {
     headers: {
       "Content-Type": "application/json",
@@ -18,8 +18,10 @@ export const getBookings = async () => {
   return res.json();
 };
 
+export const getBookings = getAllBookings;
+
 export const getBookingsByUser = async (userId) => {
-  const all = await getBookings();
+  const all = await getAllBookings();
   return all.filter((b) => String(b.user?._id || b.user) === String(userId));
 };
 
@@ -45,13 +47,45 @@ export const cancelBooking = async (id) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      ...authHeaders(),
+      ...authHeaders(), 
     },
     body: JSON.stringify({ user: userId }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || "Failed to cancel booking");
+  }
+  return res.json();
+};
+
+export const approveBooking = async (id) => {
+  const res = await fetch(`${API_BASE}/booking/approve/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+    },
+    body: JSON.stringify({ approver: localStorage.getItem("userId") }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to approve booking");
+  }
+  return res.json();
+};
+
+export const rejectBooking = async (id) => {
+  const res = await fetch(`${API_BASE}/booking/reject/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+    },
+    body: JSON.stringify({ approver: localStorage.getItem("userId") }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to reject booking");
   }
   return res.json();
 };
