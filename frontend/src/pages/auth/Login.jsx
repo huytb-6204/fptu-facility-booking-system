@@ -1,22 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const res = await login(email, password);
 
+      const userId = res.user.id || res.user._id; 
+
       localStorage.setItem("token", res.token);
       localStorage.setItem("role", res.user.role);
-      localStorage.setItem("userId", res.user._id);
+      localStorage.setItem("userId", userId);
       localStorage.setItem("userName", res.user.name);
 
-      if (res.user.role === "Student" || res.user.role === "Lecturer") {
-        window.location.href = "/dashboard";
-      }
+      const role = res.user.role;
+      const redirectByRole = {
+        Admin: "/admin/bookings",
+        Student: "/dashboard",
+        Lecturer: "/dashboard",
+      };
+
+      navigate(redirectByRole[role] || "/login", { replace: true });
     } catch (err) {
       alert("Login failed: " + err.message);
     }

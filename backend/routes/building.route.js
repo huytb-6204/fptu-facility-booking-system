@@ -9,7 +9,7 @@ router.post("/", authMiddleware, requireRole("Admin"), async (req, res) => {
   res.json(item);
 });
 
-router.get("/", authMiddleware, requireRole("Admin"), async (req, res) => {
+router.get("/", authMiddleware, requireRole("Student", "Lecturer", "Admin"), async (req, res) => {
   const list = await Building.find().populate("campus");
   res.json(list);
 });

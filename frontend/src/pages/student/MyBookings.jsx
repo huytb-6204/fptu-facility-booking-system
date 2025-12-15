@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getBookingsByUser, cancelBooking } from "../../api/bookingApi";
+import { socket } from "../../socket";
 
 export default function StudentMyBookings() {
   const [list, setList] = useState([]);
@@ -7,6 +8,19 @@ export default function StudentMyBookings() {
 
   useEffect(() => {
     getBookingsByUser(userId).then(setList).catch(console.error);
+  }, [userId]);
+
+  useEffect(() => {
+    const handleStatusUpdated = (updatedBooking) => {
+      setList((prev) =>
+        prev.map((b) => (b._id === updatedBooking._id ? updatedBooking : b))
+      );
+    };
+
+    socket.on("bookingStatusUpdated", handleStatusUpdated);
+    return () => {
+      socket.off("bookingStatusUpdated", handleStatusUpdated);
+    };
   }, []);
 
   const handleCancel = async (id) => {
@@ -37,7 +51,9 @@ export default function StudentMyBookings() {
               <td className="p-3">
                 {b.startTime} - {b.endTime}
               </td>
-              <td className="p-3">{b.status}</td>
+              <td className="p-3">
+                <span className={getStatusClass(b.status)}>{getStatusLabel(b.status)}</span>
+              </td>
               <td className="p-3">
                 {b.status === "Pending" && (
                   <button onClick={() => handleCancel(b._id)} className="text-red-600">
@@ -52,3 +68,20 @@ export default function StudentMyBookings() {
     </div>
   );
 }
+
+const statusColors = {
+  Pending: "text-yellow-500",
+  Approved: "text-green-600",
+  Rejected: "text-red-600",
+  Cancelled: "text-gray-600",
+};
+
+const statusLabel = {
+  Pending: "🟡 Pending",
+  Approved: "🟢 Approved",
+  Rejected: "🔴 Rejected",
+  Cancelled: "⚫ Cancelled",
+};
+
+const getStatusClass = (status) => statusColors[status] || "text-gray-700";
+const getStatusLabel = (status) => statusLabel[status] || status;

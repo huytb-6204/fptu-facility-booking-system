@@ -1,7 +1,8 @@
 // MUST BE FIRST – load environment variables
 import dotenv from "dotenv";
 dotenv.config();
-
+import http from "http";
+import { Server } from "socket.io";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -20,6 +21,23 @@ import authRoutes from "./routes/auth.route.js";
 import reportRoutes from "./routes/report.route.js";
 
 const app = express();
+
+const server = http.createServer(app);
+export const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
 
 // Middlewares
 app.use(express.json());
@@ -73,6 +91,6 @@ app.use("/reports", reportRoutes);
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

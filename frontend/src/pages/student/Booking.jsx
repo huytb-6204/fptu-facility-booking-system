@@ -14,6 +14,7 @@ export default function StudentBooking() {
   const [date, setDate] = useState("");
   const [startTime, setStart] = useState("");
   const [endTime, setEnd] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
@@ -34,6 +35,8 @@ export default function StudentBooking() {
   }, [selectedBuilding]);
 
   const handleBooking = async () => {
+    if (!isValid || loading) return;
+    setLoading(true);
     try {
       await createBooking({
         user: userId,
@@ -45,8 +48,13 @@ export default function StudentBooking() {
       alert("Booking thành công!");
     } catch (err) {
       alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const isValid =
+    selectedRoom && date && startTime && endTime && startTime < endTime;
 
   return (
     <div>
@@ -86,8 +94,12 @@ export default function StudentBooking() {
         <input type="time" className="border p-2" onChange={(e) => setEnd(e.target.value)} />
       </div>
 
-      <button onClick={handleBooking} className="mt-6 bg-blue-600 text-white px-4 py-2 rounded">
-        Đặt phòng
+      <button
+        onClick={handleBooking}
+        disabled={!isValid || loading}
+        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Đang đặt..." : "Đặt phòng"}
       </button>
     </div>
   );
