@@ -1,5 +1,6 @@
 import { hasConflict } from "./conflictChecker.js";
 import Booking from "../models/Booking.js";
+import { io } from "../server.js";
 
 export const getAll = async () => {
   const bookings = await Booking.find()
@@ -66,7 +67,7 @@ export const cancel = async (id, userId) => {
 
 
 export const approve = async (id, approverId) => {
-  const booking = await Booking.findById(id);
+  const booking = await Booking.findById(id).populate("user room");
   if (!booking) {
     throw new Error("Booking not found.");
   }
@@ -93,13 +94,15 @@ export const approve = async (id, approverId) => {
   });
 
   await booking.save();
+  io.emit("bookingStatusUpdated", booking);
+
   return booking;
 };
 
 
 
 export const reject = async (id, approverId) => {
-  const booking = await Booking.findById(id);
+  const booking = await Booking.findById(id).populate("user room");
   if(!booking) {
     throw new Error("Booking not found.");
   }
@@ -124,5 +127,6 @@ export const reject = async (id, approverId) => {
   });
 
   await booking.save();
+  io.emit("bookingStatusUpdated", booking);
   return booking;
 }  
