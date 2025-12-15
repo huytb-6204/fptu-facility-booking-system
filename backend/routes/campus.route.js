@@ -11,13 +11,13 @@ router.post("/", authMiddleware, requireRole("Admin"), async (req, res) => {
 });
 
 // READ ALL
-router.get("/", authMiddleware, requireRole("Admin"), async (req, res) => {
+router.get("/", authMiddleware, requireRole("Student", "Lecturer", "Admin"), async (req, res) => {
   const list = await Campus.find();
   res.json(list);
 });
 
 // READ ONE
-router.get("/:id", authMiddleware, requireRole("Admin"), async (req, res) => {
+router.get("/:id", authMiddleware, requireRole("Student", "Lecturer", "Admin"), async (req, res) => {
   const campus = await Campus.findById(req.params.id);
   res.json(campus);
 });
