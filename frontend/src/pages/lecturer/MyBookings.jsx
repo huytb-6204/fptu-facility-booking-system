@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { getBookingsByUser, cancelBooking } from "../../api/bookingApi";
 import { socket } from "../../socket";
+import BookingHistoryModal from "../../components/BookingHistoryModal";
 
 export default function LecturerMyBookings() {
   const [list, setList] = useState([]);
   const userId = localStorage.getItem("userId");
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
     getBookingsByUser(userId).then(setList).catch(console.error);
@@ -12,9 +15,17 @@ export default function LecturerMyBookings() {
 
   useEffect(() => {
     const handleStatusUpdated = (updatedBooking) => {
-      setList((prev) =>
-        prev.map((b) => (b._id === updatedBooking._id ? updatedBooking : b))
-      );
+      setList((prev) => {
+        const exists = prev.some((b) => b._id === updatedBooking._id);
+        if (!exists) return prev;
+
+        const prevBooking = prev.find((b) => b._id === updatedBooking._id);
+        if (prevBooking?.status !== updatedBooking.status && updatedBooking.status === "Rejected") {
+          toast.error("Booking của bạn đã bị từ chối");
+        }
+
+        return prev.map((b) => (b._id === updatedBooking._id ? updatedBooking : b));
+      });
     };
 
     socket.on("bookingStatusUpdated", handleStatusUpdated);
@@ -60,11 +71,21 @@ export default function LecturerMyBookings() {
                     Hủy
                   </button>
                 )}
+                <button
+                  onClick={() => setSelectedBooking(b)}
+                  className="ml-3 text-blue-600"
+                >
+                  Xem lịch sử
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <BookingHistoryModal
+        booking={selectedBooking}
+        onClose={() => setSelectedBooking(null)}
+      />
     </div>
   );
 }
