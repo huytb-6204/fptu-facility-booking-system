@@ -19,6 +19,7 @@ import notificationTemplateRoutes from "./routes/notificationTemplate.route.js";
 import notificationLogRoutes from "./routes/notificationLog.route.js";
 import authRoutes from "./routes/auth.route.js";
 import reportRoutes from "./routes/report.route.js";
+import adminRoutes from "./routes/admin.route.js";
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.use("/notification-template", notificationTemplateRoutes);
 app.use("/notification-log", notificationLogRoutes);
 app.use("/reports", reportRoutes);
 app.use("/reports", reportRoutes);
+app.use("/admin", adminRoutes);
 
 // ==========================
 // START SERVER

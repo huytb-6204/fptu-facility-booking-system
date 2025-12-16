@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { createBooking } from "../../api/bookingApi";
 import { getCampuses, getBuildings, getRooms } from "../../api/roomApi";
 
@@ -45,9 +46,9 @@ export default function StudentBooking() {
         startTime,
         endTime,
       });
-      alert("Booking thành công!");
+      toast.success("Đặt phòng thành công");
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Đặt phòng thất bại");
     } finally {
       setLoading(false);
     }

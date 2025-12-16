@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { getAllBookings, approveBooking, rejectBooking } from "../../api/bookingApi";
 import { socket } from "../../socket";
+import BookingHistoryModal from "../../components/BookingHistoryModal";
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
     loadPending();
@@ -34,13 +37,23 @@ export default function AdminBookings() {
   };
 
   async function handleApprove(id) {
-    await approveBooking(id);
-    loadPending();
+    try {
+      await approveBooking(id);
+      toast.success("Đã phê duyệt booking");
+      loadPending();
+    } catch (err) {
+      toast.error(err.message || "Phê duyệt thất bại");
+    }
   }
 
   async function handleReject(id) {
-    await rejectBooking(id);
-    loadPending();
+    try {
+      await rejectBooking(id);
+      toast.success("Đã từ chối booking");
+      loadPending();
+    } catch (err) {
+      toast.error(err.message || "Từ chối thất bại");
+    }
   }
 
   return (
@@ -80,6 +93,12 @@ export default function AdminBookings() {
                 >
                   Reject
                 </button>
+                <button
+                  className="ml-3 text-blue-600"
+                  onClick={() => setSelectedBooking(b)}
+                >
+                  Xem chi tiết
+                </button>
               </td>
             </tr>
           ))}
@@ -92,6 +111,10 @@ export default function AdminBookings() {
           )}
         </tbody>
       </table>
+      <BookingHistoryModal
+        booking={selectedBooking}
+        onClose={() => setSelectedBooking(null)}
+      />
     </div>
   );
 }
