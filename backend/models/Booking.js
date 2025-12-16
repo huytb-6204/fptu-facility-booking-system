@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const BookingStatusHistorySchema = new mongoose.Schema({
-  status: { type: String, enum: ["Pending", "Approved", "Rejected, Cancelled"], required: true },
+    const BookingStatusHistorySchema = new mongoose.Schema({
+  status: { type: String, enum: ["Pending", "Approved", "Rejected", "Cancelled"], required: true },
   changedAt: { type: Date, default: Date.now },
   changedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
@@ -18,7 +18,7 @@ const BookingSchema = new mongoose.Schema({
   date: String,
   startTime: String,
   endTime: String,
-  status: { type: String, enum: ["Pending", "Approved", "Rejected, Cancelled"], default: "Pending" },
+  status: { type: String, enum: ["Pending", "Approved", "Rejected", "Cancelled"], default: "Pending" },
   approval: ApprovalSchema,
   statusHistory: [BookingStatusHistorySchema],
 });

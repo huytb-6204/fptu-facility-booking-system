@@ -1,18 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import AppRouter from "./router/AppRouter";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <div className="p-10 bg-red-200 text-center">
-      <h1 className="text-3xl font-bold text-blue-600">
-        Tailwind is working!
-      </h1>
-    </div>
+    <>
+      <AppRouter />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }
-
-export default App

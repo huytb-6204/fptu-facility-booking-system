@@ -10,8 +10,8 @@ import { authMiddleware, requireRole } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-// Student + Lecturer can create booking
-router.post("/", authMiddleware, requireRole("Student", "Lecturer"), createBooking);
+// Student + Lecturer (and Admin if needed) can create booking
+router.post("/", authMiddleware, requireRole("Student", "Lecturer", "Admin"), createBooking);
 
 // All roles allowed to view (optional: Student only sees his own)
 router.get("/", authMiddleware, requireRole("Student", "Lecturer", "Admin"), getAllBookings);
